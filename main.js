@@ -91,7 +91,7 @@
     var typedWord = { n: 0 }
     var t1 = gsap.timeline({ defaults: D, scrollTrigger: st('space') })
     t1.fromTo(heroCopy, { opacity: 1, y: 0, filter: 'blur(0px)' }, { opacity: 0, y: -90, filter: 'blur(10px)', duration: 0.42, ease: 'power1.in' }, 0.18)
-      .fromTo(orb, { scale: 1, opacity: 1 }, { scale: 0.86, opacity: 0.55, duration: 0.6 }, 0.1)
+      .fromTo(orb, { scale: 1, opacity: 1 }, { scale: 1.05, opacity: 1, duration: 0.6 }, 0.1)
       /* El wordmark se escribe desde el isotipo; al completarse queda centrado y el isotipo a su izquierda. */
       .to(typedWord, {
         n: FULL.length, duration: 0.6,
