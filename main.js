@@ -75,10 +75,19 @@
     }
 
     /* Beat 1: la portada se va y la marca ocupa el centro. */
+    var slide = { v: 0 }
     var t1 = gsap.timeline({ defaults: D, scrollTrigger: st('space') })
     t1.fromTo(heroCopy, { opacity: 1, y: 0, filter: 'blur(0px)' }, { opacity: 0, y: -90, filter: 'blur(10px)', duration: 0.42, ease: 'power1.in' }, 0.18)
-      .fromTo(orb, { scale: 1, opacity: 1 }, { scale: 0.86, opacity: 0.55, x: 28, duration: 0.6 }, 0.1)
-      .fromTo(word, { x: 0 }, { x: 28, duration: 0.6 }, 0.1)
+      .fromTo(orb, { scale: 1, opacity: 1 }, { scale: 0.86, opacity: 0.55, duration: 0.6 }, 0.1)
+      /* El isotipo se coloca a la izquierda del wordmark, que queda centrado: se mide el ancho real. */
+      .to(slide, {
+        v: 1, duration: 0.6,
+        onUpdate: function () {
+          var x = -(44 + word.offsetWidth / 2) * slide.v
+          gsap.set(orb, { x: x })
+          gsap.set(word, { x: x })
+        }
+      }, 0.1)
       .fromTo(word, { opacity: 0 }, { opacity: 1, duration: 0.18, ease: 'power2.out' }, 0.26)
       .fromTo(halo, { opacity: 1, scale: 1 }, { opacity: 0.4, scale: 1.5, duration: 0.6 }, 0.1)
       .fromTo(drip, { opacity: 1 }, { opacity: 0, duration: 0.12 }, 0.3)
