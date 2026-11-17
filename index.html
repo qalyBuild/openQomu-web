@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="es" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fbfaff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c0b12" media="(prefers-color-scheme: dark)">
+<title>openQomu · Menos ruido. Más equipo.</title>
+<meta name="description" content="Chat, tableros, documentos y archivos en una sola ventana. openQomu es un espacio de trabajo open source y autoalojable: local, Firebase o tu propio servidor.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="openQomu">
+<meta property="og:url" content="https://openqomu.qaly.dev/">
+<meta property="og:title" content="openQomu · Menos ruido. Más equipo.">
+<meta property="og:description" content="Chat, tableros, documentos y archivos en una sola ventana. Open source, autoalojable y en tiempo real.">
+<meta property="og:image" content="assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/og.jpg">
+<link rel="canonical" href="https://openqomu.qaly.dev/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="theme.js"></script>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="scenes.css">
+<script defer src="vendor/gsap.min.js"></script>
+<script defer src="vendor/ScrollTrigger.min.js"></script>
+<script defer src="vendor/lenis.min.js"></script>
+<script defer src="main.js"></script>
+<script defer src="scenes.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+ <symbol id="mark" viewBox="0 0 256 256">
+  <path fill="var(--mark-a, #171A29)" d="M 18 126 L 18 81 C 18 56 37 38 62 38 L 132 38 L 132 83 L 115 100 C 103 112 96 130 80 144 L 58 165 L 37 165 C 26 165 18 156 18 145 Z"/>
+  <path fill="#6038FA" d="M 112 12 L 166 12 C 195 12 216 33 216 61 L 216 128 L 176 128 L 149 106 C 137 96 129 89 113 89 L 112 89 Z"/>
+  <path fill="#A89CF2" d="M 238 128 L 238 181 C 238 208 219 229 192 229 L 125 229 L 125 188 C 125 171 132 158 146 146 C 161 132 175 128 191 128 Z"/>
+  <path fill="#868795" d="M 33 150 L 55 150 L 79 171 C 92 184 103 191 120 191 L 125 191 L 125 247 L 89 247 C 57 247 33 225 33 194 Z"/>
+ </symbol>
+ <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15.5a2 2 0 0 1-2 2H9l-5 3V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2Z"/></symbol>
+ <symbol id="i-board" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></symbol>
+ <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
+ <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+ <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.4"/></symbol>
+ <symbol id="i-hash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 3 7 21M17 3l-2 18M4 9h16M3 15h16"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12 16-8-5 16-4-6Z"/></symbol>
+ <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/></symbol>
+</defs></svg>
+
+<header class="top">
+ <a class="brand" href="#top" aria-label="openQomu, volver arriba">
+  <svg class="brand-mark" aria-hidden="true"><use href="#mark"/></svg>openQomu
+ </a>
+ <nav class="nav" aria-label="Principal">
+  <a href="#producto">Producto</a>
+  <a href="#autoalojar">Autoalojar</a>
+  <a href="#agentes">Agentes</a>
+  <a href="#faq">Preguntas</a>
+  <button class="theme" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro" aria-pressed="false"><i aria-hidden="true"></i></button>
+  <a class="btn ghost sm enter-link" data-enter href="https://demo.openqomu.qaly.dev/?entrar=1">Entrar</a>
+  <a class="btn sm" href="https://demo.openqomu.qaly.dev/?demo=1" target="_blank" rel="noopener">Demo</a>
+ </nav>
+ <details class="menu">
+  <summary aria-label="Menú de navegación"><span aria-hidden="true"></span></summary>
+  <nav class="menu-list" aria-label="Secciones">
+   <a href="#producto">Producto</a>
+   <a href="#autoalojar">Autoalojar</a>
+   <a href="#agentes">Agentes</a>
+   <a href="#faq">Preguntas</a>
+  </nav>
+ </details>
+</header>
+
+<main id="main">
+<span id="top"></span>
+
+<!-- Historia: una etapa sticky y cuatro beats, cada uno con su timeline scrubbed. -->
+<section class="story" id="story" aria-label="Cómo funciona openQomu">
+ <div class="stage" id="stage">
+  <div class="hero-copy" id="hero-copy">
+   <h1 class="hero-h">Menos ruido.<br>Más equipo.</h1>
+   <div class="hero-side">
+    <p>Chat, tableros, documentos y archivos en la misma ventana. Open source, autoalojable y en tiempo real: tus datos se quedan donde tú decides.</p>
+    <div class="get">
+     <a class="btn" href="https://demo.openqomu.qaly.dev/?demo=1" target="_blank" rel="noopener">Probar la demo</a>
+     <a class="btn ghost enter-link" data-enter href="https://demo.openqomu.qaly.dev/?entrar=1">Entrar</a>
+     <a class="btn ghost" href="https://github.com/qalyBuild/openQomu/blob/main/docs/self-hosting.es.md" target="_blank" rel="noopener">Autoalojar</a>
+     <a class="btn ghost" href="https://github.com/qalyBuild/openQomu" target="_blank" rel="noopener">Ver el código</a>
+    </div>
+    <p class="get-note">Gratuito · AGPL-3.0</p>
+   </div>
+  </div>
+
+  <span class="mark-orb" id="mark-orb" aria-hidden="true">
+   <svg viewBox="0 0 48 48"><use href="#mark"/></svg>
+  </span>
+  <span class="mark-halo" id="mark-halo" aria-hidden="true"></span>
+  <span class="drip" aria-hidden="true"><i></i><span class="mono">Scroll</span></span>
+
+  <div class="taskp" id="taskp" aria-hidden="true">
+   <div class="taskp-inner">
+    <div class="taskp-head">
+     <svg class="taskp-mark" viewBox="0 0 48 48"><use href="#mark"/></svg>
+     <span>Nueva tarea</span>
+     <span class="kbd esc">Esc</span>
+    </div>
+    <div class="taskp-line"><span class="typed" id="typed">Banner del lanzamiento</span><i class="caret"></i></div>
+    <div class="taskp-meta">
+     <span class="chip chip-board"><i class="dot lav"></i>Lanzamiento web</span>
+     <span class="chip"><i class="av">AT</i>Ana Torres</span>
+     <span class="chip"><i class="dot amb"></i>Vie 21</span>
+    </div>
+    <div class="taskp-foot"><span><span class="kbd">⌘</span><span class="kbd">↵</span> Crear</span><span>Se guarda en el tablero</span></div>
+   </div>
+  </div>
+
+  <div class="board" id="board" aria-hidden="true">
+   <div class="board-bar">
+    <span class="tls"><i></i><i></i><i></i></span>
+    <span class="board-url">openqomu · Lanzamiento web</span>
+    <span class="live"><i></i>En vivo</span>
+   </div>
+   <div class="board-body">
+    <aside class="board-side">
+     <div class="bs-ws"><span class="bs-logo">E</span>Estudio<span class="bs-caret"></span></div>
+     <nav>
+      <span class="bs-item"><svg><use href="#i-grid"/></svg>Resumen</span>
+      <span class="bs-item"><svg><use href="#i-chat"/></svg>Chat<span class="bs-n">3</span></span>
+      <span class="bs-item on"><svg><use href="#i-board"/></svg>Tableros</span>
+      <span class="bs-item"><svg><use href="#i-doc"/></svg>Documentos</span>
+      <span class="bs-item"><svg><use href="#i-folder"/></svg>Archivos</span>
+     </nav>
+     <p class="bs-lab">Canales</p>
+     <span class="bs-ch"><svg><use href="#i-hash"/></svg>lanzamiento</span>
+     <span class="bs-ch"><svg><use href="#i-hash"/></svg>producto</span>
+     <span class="bs-ch"><svg><use href="#i-hash"/></svg>diseño</span>
+    </aside>
+    <div class="board-main">
+     <div class="board-top">
+      <span class="bt-title">Lanzamiento web</span>
+      <span class="bt-sep">/</span><span class="bt-sub">Tablero</span>
+      <span class="bt-avs"><i class="av">AT</i><i class="av alt">BV</i><i class="av alt2">CM</i></span>
+      <span class="bt-btn"><svg><use href="#i-plus"/></svg>Nueva tarea</span>
+     </div>
+     <div class="board-cols">
+      <div class="col">
+       <header><i class="cdot gre"></i>Por hacer<b class="cc">3</b></header>
+       <article class="card"><p>Ajustar la landing</p><div class="cm"><span class="tag gre">Web</span><i class="av sm">AT</i></div></article>
+       <article class="card"><p>Revisar el onboarding</p><div class="cm"><span class="tag vio">Producto</span><i class="av sm alt">BV</i></div></article>
+       <article class="card"><p>Ordenar los recibos</p><div class="cm"><span class="tag gre">Admin</span><i class="av sm alt2">CM</i></div></article>
+      </div>
+      <div class="col">
+       <header><i class="cdot vio"></i>En curso<b class="cc" id="cc-doing">2</b></header>
+       <article class="card card-target" id="card-doing"><p>Banner del lanzamiento</p><div class="cm"><span class="tag vio">Diseño</span><span class="due">Vie 21</span><i class="av sm">AT</i></div></article>
+       <article class="card"><p>Guía de estilo</p><div class="cm"><span class="tag amb">Docs</span><i class="av sm alt2">CM</i></div></article>
+      </div>
+      <div class="col">
+       <header><i class="cdot amb"></i>En revisión<b class="cc">1</b></header>
+       <article class="card"><p>Checklist de la beta</p><div class="cm"><span class="tag amb">Revisión</span><i class="av sm alt">BV</i></div></article>
+      </div>
+      <div class="col">
+       <header><i class="cdot eme"></i>Hecho<b class="cc" id="cc-done">2</b></header>
+       <article class="card card-done"><p>Cerrar la beta</p><div class="cm"><span class="tag eme">Lanzamiento</span><i class="av sm">AT</i></div></article>
+       <article class="card card-done"><p>Mockups finales</p><div class="cm"><span class="tag eme">Diseño</span><i class="av sm alt2">CM</i></div></article>
+       <article class="card card-target-done" id="card-done"><p>Banner del lanzamiento</p><div class="cm"><span class="tag eme">Hecho</span><span class="due">Vie 21</span><i class="av sm">AT</i></div></article>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <div class="toast" id="toast" aria-hidden="true">
+   <span class="toast-h"><svg><use href="#i-hash"/></svg>producto<span>ahora</span></span>
+   <p><b>Ana Torres</b> ha movido <b>Banner del lanzamiento</b> a En curso.</p>
+  </div>
+
+  <div class="caps" aria-hidden="true">
+   <div class="cap" data-cap="1"><div><span class="sc">El espacio</span><p>Un canal, un tablero y un documento. Todo en la misma ventana.</p></div><span class="mono n">01 / 04</span></div>
+   <div class="cap" data-cap="2"><div><span class="sc">La tarea</span><p>Escribe el título, elige tablero, persona y fecha. Nada más.</p></div><span class="mono n">02 / 04</span></div>
+   <div class="cap" data-cap="3"><div><span class="sc">El tablero</span><p>La tarjeta cae en su columna. El aviso llega al canal.</p></div><span class="mono n">03 / 04</span></div>
+   <div class="cap" data-cap="4"><div><span class="sc">Hecho</span><p>Ciérrala. El tablero y el panel cuentan la misma historia.</p></div><span class="mono n">04 / 04</span></div>
+  </div>
+ </div>
+ <div class="beat" data-beat="space"></div>
+ <div class="beat" data-beat="task"></div>
+ <div class="beat" data-beat="board"></div>
+ <div class="beat" data-beat="done"></div>
+ <p class="sr">Historia: el espacio de openQomu reúne un canal, un tablero y un documento. Se crea la tarea “Banner del lanzamiento” en el tablero Lanzamiento web, asignada a Ana Torres para el viernes 21. La tarjeta aparece en la columna En curso y se avisa en el canal producto. Al terminarla se mueve a Hecho y los contadores del tablero se actualizan.</p>
+</section>
+
+<!-- La misma historia, quieta: se muestra sin JS, con movimiento reducido o en móvil. -->
+<div class="frames">
+ <section class="f-hero">
+  <span class="f-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#mark"/></svg></span>
+  <div>
+   <h1 class="hero-h">Menos ruido.<br>Más equipo.</h1>
+   <div class="hero-side">
+    <p>Chat, tableros, documentos y archivos en la misma ventana. Open source, autoalojable y en tiempo real: tus datos se quedan donde tú decides.</p>
+    <div class="get">
+     <a class="btn" href="https://demo.openqomu.qaly.dev/?demo=1" target="_blank" rel="noopener">Probar la demo</a>
+     <a class="btn ghost enter-link" data-enter href="https://demo.openqomu.qaly.dev/?entrar=1">Entrar</a>
+     <a class="btn ghost" href="https://github.com/qalyBuild/openQomu/blob/main/docs/self-hosting.es.md" target="_blank" rel="noopener">Autoalojar</a>
+     <a class="btn ghost" href="https://github.com/qalyBuild/openQomu" target="_blank" rel="noopener">Ver el código</a>
+    </div>
+    <p class="get-note">Gratuito · AGPL-3.0</p>
+   </div>
+  </div>
+ </section>
+ <section class="frame" aria-label="La tarea">
+  <div class="fcap"><span class="sc">La tarea</span><p>Escribe el título, elige tablero, persona y fecha. Nada más.</p></div>
+  <div class="taskp is-still" aria-hidden="true">
+   <div class="taskp-head">
+    <svg class="taskp-mark" viewBox="0 0 48 48"><use href="#mark"/></svg>
+    <span>Nueva tarea</span><span class="kbd esc">Esc</span>
+   </div>
+   <div class="taskp-line"><span class="typed">Banner del lanzamiento</span><i class="caret"></i></div>
+   <div class="taskp-meta">
+    <span class="chip chip-board"><i class="dot lav"></i>Lanzamiento web</span>
+    <span class="chip"><i class="av">AT</i>Ana Torres</span>
+    <span class="chip"><i class="dot amb"></i>Vie 21</span>
+   </div>
+   <div class="taskp-foot"><span><span class="kbd">⌘</span><span class="kbd">↵</span> Crear</span><span>Se guarda en el tablero</span></div>
+  </div>
+ </section>
+ <section class="frame" aria-label="El tablero">
+  <div class="fcap"><span class="sc">El tablero</span><p>La tarjeta cae en su columna. El aviso llega al canal.</p></div>
+  <div class="board-card" aria-hidden="true">
+   <header><span class="cdot vio"></span>En curso <b>2</b></header>
+   <article class="card"><p>Banner del lanzamiento</p><div class="cm"><span class="tag vio">Diseño</span><span class="due">Vie 21</span><i class="av sm">AT</i></div></article>
+   <article class="card"><p>Guía de estilo</p><div class="cm"><span class="tag amb">Docs</span><i class="av sm alt2">CM</i></div></article>
+  </div>
+ </section>
+</div>
+
+<!-- Escena: caos de herramientas a una sola ventana. -->
+<section class="cz" id="caos" aria-labelledby="cz-h">
+ <div class="cz-stage">
+  <div class="cz-copy">
+   <span class="sc">Menos, a propósito</span>
+   <h2 class="cz-h" id="cz-h"><span class="cz-h1">Cinco herramientas.</span> <span class="cz-h2">Una ventana.</span></h2>
+  </div>
+  <p class="sr">Antes: cinco pestañas —chat, tablero, documentos, archivos y correo— con avisos, badges, filtros y menús. Después: el mismo trabajo en una sola ventana de openQomu: el canal producto, el tablero Lanzamiento web, el documento Brief de campaña y la carpeta de diseño, sin nada más pidiendo atención.</p>
+  <div class="cz-pair">
+   <div class="cz-area" aria-hidden="true">
+    <span class="mono cz-tag">Antes</span>
+    <div class="cz-box">
+     <div class="cz-before">
+      <div class="cz-tabs">
+       <span class="cz-tab on"><i class="cz-fav sl"></i>Slack</span>
+       <span class="cz-tab"><i class="cz-fav tr"></i>Trello</span>
+       <span class="cz-tab"><i class="cz-fav no"></i>Notion</span>
+       <span class="cz-tab"><i class="cz-fav dr"></i>Drive</span>
+       <span class="cz-tab"><i class="cz-fav ml"></i>Correo</span>
+       <span class="cz-tabs-extra">+</span>
+      </div>
+      <div class="cz-win">
+       <div class="cz-bar">
+        <span class="cz-crumbs">Estudio <i>/</i> <b>Todo</b></span>
+        <span class="cz-search">Buscar en todo…<b>⌘K</b></span>
+        <span class="cz-bell">3</span>
+        <span class="cz-avs"><i>AT</i><i>BV</i><i>CM</i><i>+5</i></span>
+       </div>
+       <div class="cz-shell">
+        <div class="cz-side">
+         <div class="cz-ws">Estudio<i class="cz-caret"></i></div>
+         <div class="cz-si on">Bandeja <b>23</b></div>
+         <div class="cz-si">Menciones <b>12</b></div>
+         <div class="cz-si">Hoy <b>8</b></div>
+         <div class="cz-si">Asignadas <b>14</b></div>
+         <div class="cz-lab">Proyectos</div>
+         <div class="cz-si">Lanzamiento <b>6</b></div>
+         <div class="cz-si">Producto <b>9</b></div>
+         <div class="cz-si">Diseño <b>4</b></div>
+         <div class="cz-lab">Etiquetas</div>
+         <div class="cz-si"><i class="cz-ld vio"></i>Urgente <b>5</b></div>
+         <div class="cz-si"><i class="cz-ld amb"></i>En revisión <b>7</b></div>
+         <div class="cz-plan">Plan gratis · 86 de 100<b>Mejorar</b><i class="cz-meter"><i></i></i></div>
+        </div>
+        <div class="cz-main">
+         <div class="cz-tools">
+          <b class="cz-big">Todo</b><span class="cz-pill">86</span>
+          <span class="cz-f">Lista</span><span class="cz-f">Tablero</span><span class="cz-f">Calendario</span>
+          <span class="cz-sp"></span>
+          <span class="cz-new">+ Nuevo</span>
+         </div>
+         <div class="cz-banner"><b>3 vencidas</b> · 12 para esta semana · Mejora para recordatorios y campos personalizados<span class="cz-x">×</span></div>
+         <div class="cz-rows">
+          <div class="cz-row cz-keep" data-at="0"><i class="cz-cb"></i><span>Banner del lanzamiento</span><i class="cz-ch vio">Diseño</i><i class="cz-ch">Vie 21</i><i class="cz-av">AT</i></div>
+          <div class="cz-row cz-keep" data-at="1"><i class="cz-cb"></i><span>Guía de estilo</span><i class="cz-ch amb">Docs</i><i class="cz-ch">Jue 20</i><i class="cz-av">CM</i></div>
+          <div class="cz-row"><i class="cz-cb"></i><span>Responder al hilo de facturas</span><i class="cz-ch">Admin</i><i class="cz-ch red">Ayer</i><i class="cz-av">BV</i></div>
+          <div class="cz-row cz-keep" data-at="2"><i class="cz-cb"></i><span>Checklist de la beta</span><i class="cz-ch amb">Revisión</i><i class="cz-ch">Hoy</i><i class="cz-av">BV</i></div>
+          <div class="cz-row"><i class="cz-cb"></i><span>Actualizar la previsión</span><i class="cz-ch">Producto</i><i class="cz-ch">Lun</i><i class="cz-av">AT</i></div>
+          <div class="cz-row cz-keep" data-at="3"><i class="cz-cb"></i><span>Mockups finales</span><i class="cz-ch vio">Diseño</i><i class="cz-ch">Hoy</i><i class="cz-av">CM</i></div>
+          <div class="cz-row"><i class="cz-cb"></i><span>Ordenar los recibos</span><i class="cz-ch">Admin</i><i class="cz-ch">Algún día</i></div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="cz-float cz-bubble">
+       <b>#general</b><p>¿Alguien revisa el banner?</p><span>3 respuestas sin leer</span>
+      </div>
+      <div class="cz-float cz-mail">
+       <b>12 correos</b><p>Facturas, newsletter, avisos…</p>
+      </div>
+     </div>
+
+     <div class="cz-after">
+      <span class="mono cz-tag cz-tag-after">Después</span>
+      <div class="cz-app">
+       <div class="cz-app-bar">
+        <span class="tls"><i></i><i></i><i></i></span>
+        <span class="cz-app-url">openqomu · Lanzamiento web</span>
+        <span class="live"><i></i>En vivo</span>
+       </div>
+       <div class="cz-app-body">
+        <div class="cz-app-side">
+         <span class="bs-item"><svg><use href="#i-grid"/></svg>Resumen</span>
+         <span class="bs-item"><svg><use href="#i-chat"/></svg>Chat</span>
+         <span class="bs-item on"><svg><use href="#i-board"/></svg>Tableros</span>
+         <span class="bs-item"><svg><use href="#i-doc"/></svg>Documentos</span>
+         <span class="bs-item"><svg><use href="#i-folder"/></svg>Archivos</span>
+        </div>
+        <div class="cz-app-main">
+         <div class="cz-app-top"><b>Lanzamiento web</b><span class="cz-app-sub">4 columnas · 7 tareas</span><span class="bt-avs"><i class="av">AT</i><i class="av alt">BV</i><i class="av alt2">CM</i></span></div>
+         <div class="cz-app-cols">
+          <div class="cz-mini"><header><i class="cdot gre"></i>Por hacer<b>2</b></header>
+           <div class="card"><p>Ajustar la landing</p><div class="cm"><span class="tag gre">Web</span></div></div>
+           <div class="card"><p>Revisar el onboarding</p><div class="cm"><span class="tag vio">Producto</span></div></div>
+          </div>
+          <div class="cz-mini"><header><i class="cdot vio"></i>En curso<b>2</b></header>
+           <div class="card"><p>Banner del lanzamiento</p><div class="cm"><span class="tag vio">Diseño</span><i class="av sm">AT</i></div></div>
+           <div class="card"><p>Guía de estilo</p><div class="cm"><span class="tag amb">Docs</span></div></div>
+          </div>
+          <div class="cz-mini"><header><i class="cdot amb"></i>En revisión<b>1</b></header>
+           <div class="card"><p>Checklist de la beta</p><div class="cm"><span class="tag amb">Revisión</span></div></div>
+          </div>
+          <div class="cz-mini"><header><i class="cdot eme"></i>Hecho<b>2</b></header>
+           <div class="card"><p>Cerrar la beta</p><div class="cm"><span class="tag eme">Lanzamiento</span></div></div>
+           <div class="card"><p>Mockups finales</p><div class="cm"><span class="tag eme">Diseño</span></div></div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <p class="cz-end">El mismo trabajo, en una sola ventana. Nada más pidiendo atención.</p>
+  </div>
+ </div>
+</section>
+<!-- /Escena caos -->
+
+<!-- Escena: película de la ventana. -->
+<section class="film" id="ventana" aria-labelledby="film-h">
+ <div class="film-stage">
+  <div class="film-grid">
+   <div class="film-copy">
+    <span class="sc">La ventana</span>
+    <h2 class="film-h" id="film-h">Todo pasa aquí.</h2>
+    <p class="film-lede">Un solo sitio para hablar, decidir y guardar lo que importa. Cambia de vista sin cambiar de herramienta.</p>
+    <ol class="film-steps">
+     <li data-step="1"><span class="mono">01</span><span>El canal. La conversación donde nace, con su contexto.</span></li>
+     <li data-step="2"><span class="mono">02</span><span>El tablero. Quién hace qué y qué falta para terminar.</span></li>
+     <li data-step="3"><span class="mono">03</span><span>El documento. Decisiones y briefs con autoguardado.</span></li>
+     <li data-step="4"><span class="mono">04</span><span>Los archivos. Carpetas, búsqueda y papelera.</span></li>
+     <li data-step="5"><span class="mono">05</span><span>El panel. Carga del equipo y próximos vencimientos.</span></li>
+    </ol>
+   </div>
+   <p class="sr">Película de la ventana de openQomu: el canal lanzamiento con mensajes del equipo, el tablero Lanzamiento web con columnas y tarjetas, el documento Roadmap Q4, la biblioteca de archivos con carpetas y el panel de actividad con carga por persona y vencimientos.</p>
+   <div class="film-frame" aria-hidden="true">
+    <div class="film-dev">
+     <div class="film-bar"><span class="tls"><i></i><i></i><i></i></span><span class="film-url">openqomu · Estudio</span><span class="live"><i></i>En vivo</span></div>
+     <div class="film-body">
+      <aside class="film-side">
+       <span class="bs-item" data-nav="5"><svg><use href="#i-grid"/></svg>Resumen</span>
+       <span class="bs-item on" data-nav="1"><svg><use href="#i-chat"/></svg>Chat</span>
+       <span class="bs-item" data-nav="2"><svg><use href="#i-board"/></svg>Tableros</span>
+       <span class="bs-item" data-nav="3"><svg><use href="#i-doc"/></svg>Documentos</span>
+       <span class="bs-item" data-nav="4"><svg><use href="#i-folder"/></svg>Archivos</span>
+      </aside>
+      <div class="film-views">
+       <div class="view view-chat" data-view="1">
+        <div class="view-top"><svg><use href="#i-hash"/></svg><b>lanzamiento</b><span>3 miembros</span><i class="view-live">En vivo</i></div>
+        <div class="view-chat-body">
+         <div class="msg"><i class="av">AT</i><div><span class="msg-h"><b>Ana Torres</b><time>10:24</time></span><p>La beta sale el jueves. El checklist está en Documentos.</p><div class="msg-re"><i class="re-emoji">✓ 2</i><i class="re-emoji">🔥 1</i></div></div></div>
+         <div class="msg"><i class="av alt">BV</i><div><span class="msg-h"><b>Bruno Vidal</b><time>10:26</time></span><p>Kanban actualizado. Lo urgente ya está en revisión.</p></div></div>
+         <div class="msg"><i class="av alt2">CM</i><div><span class="msg-h"><b>Carla Méndez</b><time>10:31</time></span><p>Los mockups finales están en Archivos ✨</p><div class="msg-card"><svg><use href="#i-doc"/></svg><div><b>Brief de campaña</b><span>Documento · actualizado ahora</span></div></div></div></div>
+        </div>
+        <div class="composer">Escribe un mensaje…<i><svg><use href="#i-send"/></svg></i></div>
+       </div>
+
+       <div class="view view-board" data-view="2">
+        <div class="view-top"><svg><use href="#i-board"/></svg><b>Lanzamiento web</b><span>4 columnas · 5 tareas</span><i class="view-live">En vivo</i></div>
+        <div class="view-cols">
+         <div class="cz-mini"><header><i class="cdot gre"></i>Por hacer<b>1</b></header><div class="card"><p>Ajustar la landing</p><div class="cm"><span class="tag gre">Web</span></div></div></div>
+         <div class="cz-mini"><header><i class="cdot vio"></i>En curso<b>2</b></header><div class="card"><p>Banner del lanzamiento</p><div class="cm"><span class="tag vio">Diseño</span><i class="av sm">AT</i></div></div><div class="card"><p>Guía de estilo</p><div class="cm"><span class="tag amb">Docs</span></div></div></div>
+         <div class="cz-mini"><header><i class="cdot amb"></i>En revisión<b>1</b></header><div class="card"><p>Checklist de la beta</p><div class="cm"><span class="tag amb">Revisión</span></div></div></div>
+         <div class="cz-mini"><header><i class="cdot eme"></i>Hecho<b>1</b></header><div class="card"><p>Cerrar la beta</p><div class="cm"><span class="tag eme">Lanzamiento</span></div></div></div>
+        </div>
+       </div>
+
+       <div class="view view-doc" data-view="3">
+        <div class="view-top"><svg><use href="#i-doc"/></svg><b>Roadmap Q4</b><span>Guardado</span></div>
+        <div class="doc">
+         <h3>Roadmap Q4</h3>
+         <p>El objetivo del trimestre: cerrar la beta, ordenar el onboarding y publicar la app Android.</p>
+         <h4>Antes de diciembre</h4>
+         <ul class="doc-list">
+          <li><i class="doc-check on"><svg><use href="#i-check"/></svg></i>Checklist de la beta</li>
+          <li><i class="doc-check on"><svg><use href="#i-check"/></svg></i>Mockups finales</li>
+          <li><i class="doc-check"></i>Banner del lanzamiento</li>
+          <li><i class="doc-check"></i>Guía de autoalojamiento</li>
+         </ul>
+         <p class="doc-note">Se guarda solo. Sin botón de guardar.</p>
+        </div>
+       </div>
+
+       <div class="view view-files" data-view="4">
+        <div class="view-top"><svg><use href="#i-folder"/></svg><b>Archivos</b><span>Biblioteca</span></div>
+        <div class="files">
+         <div class="files-head"><b>Diseño</b><span>12 elementos</span><span class="files-btn">Subir</span></div>
+         <div class="file-grid">
+          <div class="file"><i class="fi img"></i><b>banner-v3.png</b><span>2,4 MB</span></div>
+          <div class="file"><i class="fi img"></i><b>mockup-home.png</b><span>1,8 MB</span></div>
+          <div class="file"><i class="fi pdf"></i><b>brief-campaña.pdf</b><span>640 KB</span></div>
+          <div class="file"><i class="fi doc"></i><b>guía-de-estilo.md</b><span>18 KB</span></div>
+         </div>
+         <div class="files-foot">Favoritos · Papelera · Búsqueda</div>
+        </div>
+       </div>
+
+       <div class="view view-dash" data-view="5">
+        <div class="view-top"><svg><use href="#i-grid"/></svg><b>Resumen</b><span>Estudio</span></div>
+        <div class="dash">
+         <div class="dash-stats">
+          <div class="stat"><span>Abiertas</span><b>12</b><i>17 en total</i></div>
+          <div class="stat"><span>Completadas</span><b>5</b><i>29% de avance</i></div>
+          <div class="stat"><span>En revisión</span><b>2</b><i>Pendientes</i></div>
+         </div>
+         <div class="dash-chart">
+          <div class="dash-ch-head"><b>Ritmo del equipo</b><span>Últimos 14 días</span></div>
+          <div class="bars">
+           <i style="--h:38%"></i><i style="--h:56%"></i><i style="--h:44%"></i><i style="--h:72%"></i><i style="--h:61%"></i><i style="--h:84%"></i><i style="--h:52%"></i><i style="--h:68%"></i><i style="--h:92%"></i><i style="--h:74%"></i><i style="--h:58%"></i><i style="--h:66%"></i><i style="--h:48%"></i><i style="--h:80%"></i>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <p class="film-cap"><span class="mono" id="film-n">01</span><span id="film-capt">El canal. La conversación donde nace, con su contexto.</span></p>
+   </div>
+  </div>
+ </div>
+</section>
+<!-- /Escena ventana -->
+
+<section class="sec" id="producto">
+ <div class="wrapx">
+  <div class="sec-head" data-rise>
+   <span class="sc">Producto</span>
+   <h2>Un solo lugar.<br>Sin fricción.</h2>
+   <p>openQomu no añade otra pestaña: retira las que sobran y deja a la vista lo que ayuda a decidir, ejecutar y recordar.</p>
+  </div>
+  <ul class="ex">
+   <li data-rise><div class="ex-l"><span class="ex-t">Canales e hilos</span><span class="ex-d">Menciones, reacciones, adjuntos y recibos de entrega. La conversación se queda donde nace.</span></div><span class="ex-r">Tiempo real</span></li>
+   <li data-rise><div class="ex-l"><span class="ex-t">Tableros Kanban</span><span class="ex-d">Prioridades, etiquetas, dependencias, responsables y flujo de revisión. Arrastrar y soltar.</span></div><span class="ex-r">De la idea al hecho</span></li>
+   <li data-rise><div class="ex-l"><span class="ex-t">Documentos</span><span class="ex-d">Editor rico con autoguardado y páginas anidadas para briefs, actas y decisiones.</span></div><span class="ex-r">Sin botón de guardar</span></li>
+   <li data-rise><div class="ex-l"><span class="ex-t">Biblioteca de archivos</span><span class="ex-d">Carpetas, búsqueda, favoritos y papelera. Sobre S3 o el almacenamiento que elijas.</span></div><span class="ex-r">Tu almacenamiento</span></li>
+   <li data-rise><div class="ex-l"><span class="ex-t">Panel de actividad</span><span class="ex-d">Tareas abiertas, avance, carga por persona y próximos vencimientos.</span></div><span class="ex-r">Métricas claras</span></li>
+  </ul>
+ </div>
+</section>
+
+<section class="sec" id="datos">
+ <div class="wrapx">
+  <div class="sec-head" data-rise>
+   <span class="sc">Datos</span>
+   <h2>Los datos son tuyos.</h2>
+   <p>El build es un paquete estático. Sin servidor, openQomu guarda todo en tu navegador. Con Firebase, en tu propio proyecto. Y si no lo usas más, te llevas los archivos y ya está.</p>
+  </div>
+  <div class="data-grid">
+   <div class="card" data-rise>
+    <div class="cap-row"><span class="sc">El paquete</span><span class="mono">dist/</span></div>
+    <ul class="tree" aria-label="Contenido del build estático de openQomu">
+     <li><i class="tree-i folder"></i><span>dist</span><span class="r">3</span></li>
+     <li class="in1"><i class="tree-i html"></i><span>index.html</span><span></span></li>
+     <li class="in1"><i class="tree-i folder"></i><span>assets</span><span class="r">42</span></li>
+     <li class="in1"><i class="tree-i file"></i><span>favicon.svg</span><span></span></li>
+     <li class="in1"><i class="tree-i file"></i><span>openqomu.apk</span><span class="opt">opcional</span></li>
+    </ul>
+    <p class="card-note">nginx, Caddy, Docker, GitHub Pages, Cloudflare Pages o cualquier CDN.</p>
+   </div>
+   <div class="card" data-rise>
+    <div class="cap-row"><span class="sc">La configuración</span><span class="mono">.env.local</span></div>
+<pre class="code"><span class="cmt"># Sin esto, modo local. Sin servidor.</span>
+<span class="key">VITE_FIREBASE_API_KEY</span>=…
+<span class="key">VITE_FIREBASE_PROJECT_ID</span>=…
+<span class="key">VITE_FIREBASE_AUTH_DOMAIN</span>=…
+<span class="key">VITE_FIREBASE_STORAGE_BUCKET</span>=…
+
+<span class="cmt"># Opcionales: archivos, push y agentes</span>
+<span class="key">VITE_FILES_URL</span>=https://files.example.com
+<span class="key">VITE_MCP_URL</span>=https://mcp.example.com/mcp</pre>
+   </div>
+  </div>
+  <div class="facts">
+   <div data-rise><h3>Local por defecto</h3><p>Sin configuración. Los datos viven en localStorage e IndexedDB de tu navegador.</p></div>
+   <div data-rise><h3>Firebase si quieres</h3><p>Cuentas, sincronía en tiempo real y almacenamiento en tu propio proyecto.</p></div>
+   <div data-rise><h3>Sin cajas negras</h3><p>AGPL-3.0. El código se lee, se modifica y se despliega donde haga falta.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="sec" id="autoalojar">
+ <div class="wrapx">
+  <div class="sec-head" data-rise>
+   <span class="sc">Autoalojar</span>
+   <h2>Tuyo, en tu servidor.</h2>
+   <p>Elige cuánto backend quieres. Sin planes, sin límite de asientos y sin factura de suscripción: el coste es la infraestructura que decidas usar.</p>
+  </div>
+  <div class="cmp" id="empezar">
+   <table class="ct">
+    <caption class="sr">Comparación de las tres formas de ejecutar openQomu</caption>
+    <thead><tr>
+     <th scope="col" class="h h-lbl"><span class="sr">Función</span></th>
+     <th scope="col" class="h"><span class="hm"></span><span class="hn">Local</span><span class="hp">Sin servidor<br>Un navegador</span></th>
+     <th scope="col" class="h c-brand"><span class="hm brand"></span><span class="hn">Firebase</span><span class="hp">Tu proyecto<br>Tiempo real</span></th>
+     <th scope="col" class="h"><span class="hm"></span><span class="hn">Estático + Firebase</span><span class="hp">Tu hosting<br>Control total</span></th>
+    </tr></thead>
+    <tbody>
+     <tr class="g"><th colspan="4" scope="colgroup"><span class="sc">Producto</span></th></tr>
+     <tr><th scope="row"><span class="lbl">Chat, tableros, documentos y archivos</span><span class="sub">Todo en una sola ventana.</span></th>
+      <td class="c"><svg class="rg on" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.25"/><path d="m8.1 12.3 2.6 2.6 5.2-5.6"/></svg><span class="sr">Incluido</span></td>
+      <td class="c c-brand"><svg class="rg on brand" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.25"/><path d="m8.1 12.3 2.6 2.6 5.2-5.6"/></svg><span class="sr">Incluido</span></td>
+      <td class="c"><svg class="rg on" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.25"/><path d="m8.1 12.3 2.6 2.6 5.2-5.6"/></svg><span class="sr">Incluido</span></td></tr>
+     <tr><th scope="row"><span class="lbl">Cuentas e invitaciones</span><span class="sub">Enlaces que caducan y roles por espacio.</span></th>
+      <td class="c"><span class="cv">Solo local</span></td>
+      <td class="c c-brand"><svg class="rg on brand" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.25"/><path d="m8.1 12.3 2.6 2.6 5.2-5.6"/></svg><span class="sr">Incluido</span></td>
+      <td class="c"><svg class="rg on" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.25"/><path d="m8.1 12.3 2.6 2.6 5.2-5.6"/></svg><span class="sr">Incluido</span></td></tr>
+     <tr><th scope="row"><span class="lbl">Sincronía entre dispositivos</span><span class="sub">El mismo estado para todo el equipo.</span></th>
+      <td class="c"><span class="cv">—</span></td>
+      <td class="c c-brand"><svg class="rg on brand" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.25"/><path d="m8.1 12.3 2.6 2.6 5.2-5.6"/></svg><span class="sr">Incluido</span></td>
+      <td class="c"><svg class="rg on" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.25"/><path d="m8.1 12.3 2.6 2.6 5.2-5.6"/></svg><span class="sr">Incluido</span></td></tr>
+     <tr><th scope="row"><span class="lbl">Archivos, push y agentes</span><span class="sub">Workers opcionales sobre S3, FCM y MCP.</span></th>
+      <td class="c"><span class="cv">Local</span></td>
+      <td class="c c-brand"><span class="cv">Opcional</span></td>
+      <td class="c"><span class="cv">Opcional</span></td></tr>
+     <tr><th scope="row"><span class="lbl">App Android</span><span class="sub">APK firmada por ti, con actualizaciones propias.</span></th>
+      <td class="c"><span class="cv">—</span></td>
+      <td class="c c-brand"><svg class="rg on brand" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.25"/><path d="m8.1 12.3 2.6 2.6 5.2-5.6"/></svg><span class="sr">Incluido</span></td>
+      <td class="c"><svg class="rg on" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.25"/><path d="m8.1 12.3 2.6 2.6 5.2-5.6"/></svg><span class="sr">Incluido</span></td></tr>
+     <tr><th scope="row"><span class="lbl">Coste</span><span class="sub">Sin suscripciones ni asientos.</span></th>
+      <td class="c"><span class="cv">0 €</span></td>
+      <td class="c c-brand"><span class="cv">Tu plan de Firebase</span></td>
+      <td class="c"><span class="cv">Hosting + Firebase</span></td></tr>
+    </tbody>
+    <tfoot><tr>
+     <td></td>
+     <td class="c"><a class="cta" href="https://github.com/qalyBuild/openQomu/blob/main/README.es.md">Empezar en local</a></td>
+     <td class="c c-brand"><a class="cta brand" href="https://github.com/qalyBuild/openQomu/blob/main/docs/self-hosting.es.md">Guía de Firebase</a><span class="soon">Cinco pasos y reglas de seguridad</span></td>
+     <td class="c"><a class="cta" href="https://github.com/qalyBuild/openQomu/blob/main/docs/self-hosting.es.md">Guía de despliegue</a></td>
+    </tr></tfoot>
+   </table>
+  </div>
+  <p class="fine">openQomu es software libre bajo AGPL-3.0-only. No hay versión de pago ni funciones retenidas: el repositorio completo es el producto. Los nombres y la marca se rigen por <a href="https://github.com/qalyBuild/openQomu/blob/main/TRADEMARKS.es.md">TRADEMARKS.es.md</a>.</p>
+ </div>
+</section>
+
+<section class="sec" id="agentes">
+ <div class="wrapx">
+  <div class="sec-head" data-rise>
+   <span class="sc">Agentes</span>
+   <h2>También para tus agentes.</h2>
+   <p>Un servidor MCP remoto opcional deja que un agente lea tableros, cree tareas y mueva tarjetas. Tú decides si existe, dónde vive y qué tokens emite.</p>
+  </div>
+  <div class="agent" data-rise>
+   <div class="agent-copy">
+    <h3>Leer y escribir, con permiso.</h3>
+    <p>El token se crea en Ajustes → IA y solo se muestra una vez. Los scopes separan lectura de escritura.</p>
+    <ul class="agent-list">
+     <li><code>openqomu:read</code> listar espacios, tableros, tareas y comentarios</li>
+     <li><code>openqomu:write</code> crear, actualizar, mover y borrar tareas</li>
+    </ul>
+   </div>
+<pre class="code agent-code"><span class="cmt"># mcp-worker, en Cloudflare Workers</span>
+cd mcp-worker
+npx wrangler secret put FIREBASE_SERVICE_ACCOUNT
+npx wrangler secret put FIREBASE_PROJECT_ID
+npm run deploy
+
+<span class="cmt"># Endpoint resultante</span>
+https://mcp.example.com/mcp</pre>
+  </div>
+ </div>
+</section>
+
+<section class="sec" id="faq">
+ <div class="wrapx">
+  <div class="sec-head" data-rise>
+   <span class="sc">Preguntas</span>
+   <h2>Respuestas cortas.</h2>
+  </div>
+  <div class="faq">
+   <details open>
+    <summary>¿Dónde están mis datos?</summary>
+    <div class="a"><p>Sin configuración, en tu navegador: <code>localStorage</code> e <code>IndexedDB</code>. No salen del dispositivo. Si conectas Firebase, viven en tu proyecto de Firebase, con tus reglas de seguridad. Los archivos van al backend S3 que configures.</p></div>
+   </details>
+   <details>
+    <summary>¿Hace falta cuenta?</summary>
+    <div class="a"><p>En modo local, no. Abres la demo y trabajas. Con Firebase, la autenticación es Google OAuth sobre tu propio proyecto: no hay cuentas de openQomu ni contraseñas que gestionar.</p></div>
+   </details>
+   <details>
+    <summary>¿Es gratis?</summary>
+    <div class="a"><p>Sí. El código está bajo AGPL-3.0-only, sin planes ni límites de asientos. Solo pagas la infraestructura que uses: hosting, Firebase o los Workers opcionales.</p></div>
+   </details>
+   <details>
+    <summary>¿Hay app para iPhone?</summary>
+    <div class="a"><p>No. La app móvil incluida es Android, construida con Capacitor y distribuida con tu propia firma y tu propio pipeline. En iPhone se puede usar la versión web.</p></div>
+   </details>
+   <details>
+    <summary>¿Puedo cambiarle el nombre y la marca?</summary>
+    <div class="a"><p>La licencia lo permite; la política de marca pone límites a usar el nombre openQomu. <code>VITE_PRODUCT_NAME</code> cambia el nombre visible de la instancia sin tocar el código. Revisa <a href="https://github.com/qalyBuild/openQomu/blob/main/TRADEMARKS.es.md">TRADEMARKS.es.md</a> antes de publicar.</p></div>
+   </details>
+   <details>
+    <summary>¿Cómo se despliega?</summary>
+    <div class="a"><p>El build es un paquete estático. Sirve <code>dist/</code> con nginx, Caddy, Docker, GitHub Pages, Cloudflare Pages o cualquier CDN. Para el modo Firebase hay una guía de cinco pasos y reglas de Firestore incluidas.</p></div>
+   </details>
+   <details>
+    <summary>¿Qué licencia tiene?</summary>
+    <div class="a"><p>AGPL-3.0-only. Si modificas openQomu y lo ofreces como servicio en red, la licencia exige publicar esos cambios. Los detalles están en <a href="https://github.com/qalyBuild/openQomu/blob/main/LICENSE">LICENSE</a> y en la documentación de licencias del repositorio.</p></div>
+   </details>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<footer class="foot">
+ <div class="wrapx">
+  <p class="foot-big" aria-hidden="true">openQomu</p>
+  <div class="foot-row">
+   <span class="brand"><svg class="brand-mark" aria-hidden="true"><use href="#mark"/></svg>openQomu</span>
+   <nav class="foot-links" aria-label="Pie">
+    <a href="https://demo.openqomu.qaly.dev/?demo=1" target="_blank" rel="noopener">Demo</a>
+    <a class="enter-link" href="https://demo.openqomu.qaly.dev/?entrar=1" data-enter>Entrar</a>
+    <a href="https://github.com/qalyBuild/openQomu">GitHub</a>
+    <a href="https://github.com/qalyBuild/openQomu/blob/main/docs/self-hosting.es.md">Autoalojar</a>
+    <a href="https://github.com/qalyBuild/openQomu/blob/main/docs/configuration.es.md">Configuración</a>
+    <a href="https://github.com/qalyBuild/openQomu/blob/main/LICENSE">AGPL-3.0</a>
+    <a href="https://github.com/qalyBuild/openQomu/blob/main/SECURITY.es.md">Seguridad</a>
+   </nav>
+   <span class="mono">© 2026 <a href="https://www.qaly.dev">Qaly</a></span>
+  </div>
+ </div>
+</footer>
+</body>
+</html>
