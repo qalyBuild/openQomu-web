@@ -98,7 +98,7 @@
         onUpdate: function () {
           var n = Math.round(typedWord.n)
           wordText.textContent = FULL.slice(0, n)
-          var x = -(44 + wordW / 2) * (n / FULL.length)
+          var x = -(48 + wordW / 2) * (n / FULL.length)
           gsap.set(orb, { x: x })
           gsap.set(word, { x: x })
         }
