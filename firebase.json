@@ -8,7 +8,10 @@
       "**/node_modules/**",
       "README.md",
       "LICENSE",
-      "TRADEMARKS*.md"
+      "TRADEMARKS*.md",
+      "**/.git/**",
+      "**/.github/**",
+      "**/.firebase/**"
     ],
     "headers": [
       {
